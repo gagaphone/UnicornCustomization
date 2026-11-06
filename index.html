@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Technical guide to customizing Oh My Posh on macOS using Zsh and a unicorn username mapping.">
+
+    <meta name="author" content="Your Name">
+
+    <title>Customizing Oh My Posh | Unicorn Prompt</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<a href="#main-content" class="skip-link">
+    Skip to main content
+</a>
+
+<!-- HEADER -->
+<header class="site-header">
+    <div class="container">
+
+        <p class="eyebrow">TECHNICAL REPORT · TERMINAL CUSTOMIZATION</p>
+
+        <h1>
+            Customizing Oh My Posh to Display a Unicorn Icon
+            Instead of the Username
+        </h1>
+
+        <p class="header-description">
+            A step-by-step technical guide to replacing the
+            traditional username in a macOS Zsh terminal prompt
+            with a unicorn icon (🦄).
+        </p>
+
+        <div class="header-tags">
+            <span>macOS</span>
+            <span>Zsh</span>
+            <span>Oh My Posh 31.9.1</span>
+            <span>JSON</span>
+        </div>
+
+    </div>
+</header>
+
+
+<!-- MAIN LAYOUT -->
+<div class="container page-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <h2>Contents</h2>
+
+        <nav aria-label="Table of contents">
+            <a href="#objective">1. Objective</a>
+            <a href="#environment">2. Environment</a>
+            <a href="#implementation">3. Implementation</a>
+            <a href="#verification">4. Verification</a>
+            <a href="#troubleshooting">5. Troubleshooting</a>
+            <a href="#conclusion">6. Conclusion</a>
+        </nav>
+
+    </aside>
+
+
+    <!-- REPORT CONTENT -->
+    <main class="content" id="main-content">
+
+        <!-- OBJECTIVE -->
+        <section id="objective">
+
+            <h2>1. Objective</h2>
+
+            <p>
+                The objective of this configuration is to customize
+                the terminal prompt using Oh My Posh by replacing
+                the displayed username with a unicorn icon (🦄).
+            </p>
+
+            <p><strong>Expected result:</strong></p>
+
+            <div class="results-grid">
+
+                <div class="result-card">
+                    <span class="result-label">DEFAULT PROMPT</span>
+                    <div class="result-number" style="font-size: 19px;">
+                        YOUR_MAC_USERNAME
+                    </div>
+                    <p>~/Documents ❯</p>
+                </div>
+
+                <div class="result-card">
+                    <span class="result-label">CUSTOMIZED PROMPT</span>
+                    <div class="result-number">🦄</div>
+                    <p>~/Documents ❯</p>
+                </div>
+
+            </div>
+
+            <div class="info-box">
+                <strong>Objective:</strong>
+                Replace the displayed username while preserving
+                the existing theme colors and other prompt elements.
+            </div>
+
+        </section>
+
+
+        <!-- ENVIRONMENT -->
+        <section id="environment">
+
+            <h2>2. Environment and Software</h2>
+
+            <p>The following environment was used:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Configuration</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Operating system</td>
+                            <td>macOS</td>
+                        </tr>
+                        <tr>
+                            <td>Shell</td>
+                            <td>Zsh</td>
+                        </tr>
+                        <tr>
+                            <td>Oh My Posh</td>
+                            <td>Version 31.9.1</td>
+                        </tr>
+                        <tr>
+                            <td>Configuration format</td>
+                            <td>JSON</td>
+                        </tr>
+                        <tr>
+                            <td>Terminal editor</td>
+                            <td>Pico / Nano</td>
+                        </tr>
+                        <tr>
+                            <td>Configuration file</td>
+                            <td><code>~/mytheme.omp.json</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+
+        <!-- IMPLEMENTATION -->
+        <section id="implementation">
+
+            <h2>3. Step-by-Step Implementation</h2>
+
+            <h3>Step 1: Verify Oh My Posh installation</h3>
+
+            <p>Check the installed version:</p>
+
+            <pre><code>oh-my-posh version</code></pre>
+
+            <div class="success-box">
+                <strong>Expected output:</strong> 31.9.1
+            </div>
+
+
+            <h3>Step 2: Identify the active shell</h3>
+
+            <p>Execute:</p>
+
+            <pre><code>echo "$SHELL"</code></pre>
+
+            <pre><code>/bin/zsh</code></pre>
+
+            <p>
+                This confirms that Zsh is the active login shell.
+            </p>
+
+
+            <h3>Step 3: Locate the Oh My Posh initialization</h3>
+
+            <p>Inspect the Zsh configuration:</p>
+
+            <pre><code>grep -n 'oh-my-posh init' ~/.zshrc</code></pre>
+
+            <p>Example output:</p>
+
+            <pre><code>/Users/username/.zshrc:1:eval "$(oh-my-posh init zsh)"</code></pre>
+
+            <p>
+                This identifies the Oh My Posh initialization
+                command in the Zsh configuration file.
+            </p>
+
+
+            <h3>Step 4: Export the existing theme</h3>
+
+            <p>Create a separate configuration file:</p>
+
+            <pre><code>oh-my-posh config export --output ~/mytheme.omp.json</code></pre>
+
+            <p>
+                This exports the current default theme into JSON
+                format, allowing customization without directly
+                modifying the original theme.
+            </p>
+
+            <p>Verify that the file exists:</p>
+
+            <pre><code>ls -lh ~/mytheme.omp.json</code></pre>
+
+            <div class="info-box">
+                If you already use a custom theme, export that
+                specific configuration using the appropriate
+                <code>--config</code> path.
+            </div>
+
+
+            <h3>Step 5: Create a backup</h3>
+
+            <p>
+                Before modifying the configuration, create a backup:
+            </p>
+
+            <pre><code>cp ~/mytheme.omp.json ~/mytheme.omp.json.bak</code></pre>
+
+            <p>
+                This makes it possible to restore the original
+                exported theme if necessary.
+            </p>
+
+
+            <h3>Step 6: Open the configuration file</h3>
+
+            <p>
+                Open the JSON configuration using the terminal editor:
+            </p>
+
+            <pre><code>nano ~/mytheme.omp.json</code></pre>
+
+            <p>
+                Locate the <code>palette</code> section.
+                The new <code>maps</code> property will be added
+                at the top level of the JSON configuration.
+            </p>
+
+
+            <h3>Step 7: Add the unicorn username mapping</h3>
+
+            <p>
+                To replace the displayed username with a unicorn
+                icon (🦄), add a username mapping to the
+                Oh My Posh JSON configuration.
+            </p>
+
+            <h4>1. Identify your macOS username</h4>
+
+            <pre><code>whoami</code></pre>
+
+            <p>Example output:</p>
+
+            <pre><code>alex</code></pre>
+
+            <p>
+                Use the exact username returned by this command.
+            </p>
+
+            <h4>2. Locate the palette section</h4>
+
+            <pre><code>"yellow": "#F3AE35"
+},</code></pre>
+
+            <h4>3. Add the username mapping</h4>
+
+            <pre><code>"maps": {
+  "user_name": {
+    "YOUR_MAC_USERNAME": "🦄"
+  }
+},</code></pre>
+
+            <p>
+                Replace <code>YOUR_MAC_USERNAME</code> with the
+                username obtained from the <code>whoami</code>
+                command.
+            </p>
+
+            <p>For example:</p>
+
+            <pre><code>"maps": {
+  "user_name": {
+    "alex": "🦄"
+  }
+},</code></pre>
+
+            <h4>4. Verify the resulting JSON structure</h4>
+
+            <pre><code>"palette": {
+  "black": "#262B44",
+  "blue": "#4B95E9",
+  "green": "#59C9A5",
+  "orange": "#F07623",
+  "red": "#D81E5B",
+  "white": "#E0DEF4",
+  "yellow": "#F3AE35"
+},
+"maps": {
+  "user_name": {
+    "YOUR_MAC_USERNAME": "🦄"
+  }
+},
+"secondary_prompt": {</code></pre>
+
+            <div class="warning-box">
+                <strong>Important:</strong>
+                The <code>maps</code> property must be placed
+                at the top level of the JSON configuration,
+                alongside <code>palette</code> and
+                <code>blocks</code>. Do not place it inside
+                the palette object.
+            </div>
+
+            <h4>5. Understand how the mapping works</h4>
+
+            <ul>
+                <li><strong>maps:</strong> Defines replacement values for template properties.</li>
+                <li><strong>user_name:</strong> Identifies the username mapping property.</li>
+                <li><strong>YOUR_MAC_USERNAME:</strong> Represents your actual macOS username.</li>
+                <li><strong>🦄:</strong> The replacement symbol.</li>
+            </ul>
+
+            <p>
+                The session segment must use the mapped username property.
+            </p>
+
+            <pre><code>{
+  "type": "session",
+  "style": "plain",
+  "template": "{{ .UserName }}"
+}</code></pre>
+
+            <p>
+                The <code>{{ .UserName }}</code> template retrieves
+                the username value, allowing Oh My Posh to apply
+                the configured mapping.
+            </p>
+
+            <div class="info-box">
+                The mapping key must match the username returned
+                by <code>whoami</code> exactly. If the session
+                segment does not use the mapped username,
+                the unicorn replacement may not appear.
+            </div>
+
+
+            <h3>Step 8: Save the configuration</h3>
+
+            <p>In Pico or Nano:</p>
+
+            <ol>
+                <li>Press <strong>Ctrl + O</strong> to save.</li>
+                <li>Press <strong>Enter</strong> to confirm the filename.</li>
+                <li>Press <strong>Ctrl + X</strong> to exit.</li>
+            </ol>
+
+
+            <h3>Step 9: Validate the JSON configuration</h3>
+
+            <p>Execute:</p>
+
+            <pre><code>python3 -m json.tool ~/mytheme.omp.json >/dev/null && echo "JSON is valid"</code></pre>
+
+            <div class="success-box">
+                <strong>Expected output:</strong> JSON is valid
+            </div>
+
+            <p>
+                This verifies that the JSON syntax is correct.
+            </p>
+
+
+            <h3>Step 10: Configure Zsh to load the customized theme</h3>
+
+            <p>Open the Zsh configuration file:</p>
+
+            <pre><code>nano ~/.zshrc</code></pre>
+
+            <p>
+                Locate the existing Oh My Posh initialization
+                command and replace it with:
+            </p>
+
+            <pre><code>eval "$(oh-my-posh init zsh --config ~/mytheme.omp.json)"</code></pre>
+
+            <p>
+                If no existing initialization command is present,
+                add this command at the end of the file.
+            </p>
+
+            <div class="warning-box">
+                <strong>Important:</strong>
+                Keep only one active Oh My Posh initialization
+                command in <code>~/.zshrc</code>. Do not add
+                a second initialization command if one already exists.
+            </div>
+
+
+            <h3>Step 11: Reload the terminal configuration</h3>
+
+            <p>Execute:</p>
+
+            <pre><code>source ~/.zshrc</code></pre>
+
+            <p>
+                This reloads the Zsh configuration and applies
+                the customized Oh My Posh theme.
+            </p>
+
+        </section>
+
+
+        <!-- VERIFICATION -->
+        <section id="verification">
+
+            <h2>4. Verification</h2>
+
+            <p>
+                Check the terminal prompt after reloading.
+            </p>
+
+            <div class="success-box">
+                <strong>Expected appearance:</strong>
+                <pre><code>🦄  ~/Documents  ❯</code></pre>
+            </div>
+
+            <p>
+                If the original username still appears, inspect
+                the theme's <code>blocks</code> and
+                <code>segments</code> sections.
+            </p>
+
+            <p>
+                The username segment must use the mapped property,
+                for example:
+            </p>
+
+            <pre><code>{
+  "type": "session",
+  "style": "plain",
+  "template": "{{ .UserName }}"
+}</code></pre>
+
+            <p>
+                The mapping and the session template must work
+                together for the replacement to appear.
+            </p>
+
+        </section>
+
+
+        <!-- TROUBLESHOOTING -->
+        <section id="troubleshooting">
+
+            <h2>5. Troubleshooting</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Problem</th>
+                            <th>Recommended solution</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>JSON validation fails</td>
+                            <td>Check commas, quotation marks and matching braces.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Username still appears</td>
+                            <td>Verify the maps.user_name configuration and the session template.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Unicorn appears as a square</td>
+                            <td>Check terminal emoji support and configure a font that supports the unicorn emoji.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Theme does not load</td>
+                            <td>Check the initialization command in ~/.zshrc.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Wrong theme appears</td>
+                            <td>Verify the --config path.</td>
+                        </tr>
+
+                        <tr>
+                            <td>Duplicate prompt information</td>
+                            <td>Check for duplicate session segments or initialization commands.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="info-box">
+                <strong>Font compatibility:</strong>
+                A Nerd Font can help display Powerline symbols
+                and other terminal glyphs. However, emoji rendering
+                also depends on the terminal application and its
+                emoji-supporting font.
+            </div>
+
+            <h3>Restore the exported backup</h3>
+
+            <pre><code>cp ~/mytheme.omp.json.bak ~/mytheme.omp.json</code></pre>
+
+            <p>
+                If you have already modified
+                <code>~/.zshrc</code>, also check that its
+                initialization command points to the intended
+                configuration file.
+            </p>
+
+            <p>Reload the configuration after restoring:</p>
+
+            <pre><code>source ~/.zshrc</code></pre>
+
+        </section>
+
+
+        <!-- CONCLUSION -->
+        <section id="conclusion">
+
+            <h2>6. Conclusion</h2>
+
+            <p>
+                The customization process demonstrates how
+                Oh My Posh can be adapted to create a personalized
+                terminal interface.
+            </p>
+
+            <p>The main steps include:</p>
+
+            <ol class="workflow">
+
+                <li>
+                    <strong>Identify the environment</strong>
+                    <p>Identify the shell and Oh My Posh version.</p>
+                </li>
+
+                <li>
+                    <strong>Export the existing theme</strong>
+                    <p>Create a separate JSON configuration file.</p>
+                </li>
+
+                <li>
+                    <strong>Create a backup</strong>
+                    <p>Preserve the original exported theme.</p>
+                </li>
+
+                <li>
+                    <strong>Edit the JSON configuration</strong>
+                    <p>Add the username mapping.</p>
+                </li>
+
+                <li>
+                    <strong>Validate the JSON file</strong>
+                    <p>Check the configuration syntax.</p>
+                </li>
+
+                <li>
+                    <strong>Configure Zsh</strong>
+                    <p>Load the customized theme.</p>
+                </li>
+
+                <li>
+                    <strong>Reload and verify</strong>
+                    <p>Confirm the customized terminal prompt.</p>
+                </li>
+
+            </ol>
+
+            <p>
+                The final goal is to replace the traditional
+                username display with a unicorn icon (🦄),
+                while preserving the existing theme colors
+                and other prompt elements.
+            </p>
+
+            <div class="success-box">
+                <strong>Final result:</strong>
+                A personalized Oh My Posh terminal prompt
+                on macOS using Zsh.
+                <pre><code>🦄  ~/Documents  ❯</code></pre>
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="page-footer">
+
+            <p>
+                <strong>Technical Report:</strong>
+                Customizing Oh My Posh with a Unicorn Username Mapping
+            </p>
+
+            <p>
+                Platform: macOS · Shell: Zsh · Oh My Posh: 31.9.1
+            </p>
+
+            <p>
+                Documentation created for educational and
+                technical reference purposes.
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>
